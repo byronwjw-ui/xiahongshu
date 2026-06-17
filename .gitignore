@@ -1,0 +1,12 @@
+.env
+database.db
+uploads/*
+!uploads/.gitkeep
+generated_images/*
+!generated_images/.gitkeep
+mail.log
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
