@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>小红书文案生成器</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<!-- AUTH SCREEN -->
+<div id="auth" class="min-h-screen flex items-center justify-center p-4" style="display:none">
+  <div class="card w-full max-w-md">
+    <h1 class="text-2xl font-bold text-center mb-1">📖 <span class="xhs-text">小红书</span> 文案生成器</h1>
+    <p class="text-center text-sm text-gray-500 mb-6">一键生成爆款文案 + AI 配图</p>
+    <div class="flex gap-2 mb-4 justify-center">
+      <button class="tab-btn active" data-tab="login">登录</button>
+      <button class="tab-btn" data-tab="register">注册</button>
+    </div>
+    <div id="login-form" class="space-y-3">
+      <input id="login-email" type="email" placeholder="邮箱" value="admin@demo.com"/>
+      <input id="login-pass" type="password" placeholder="密码" value="admin123"/>
+      <button class="xhs-btn w-full" id="btn-login">登录</button>
+    </div>
+    <div id="register-form" class="space-y-3" style="display:none">
+      <input id="reg-email" type="email" placeholder="邮箱"/>
+      <input id="reg-pass" type="password" placeholder="密码"/>
+      <button class="xhs-btn w-full" id="btn-register">发送验证码</button>
+      <input id="reg-code" type="text" placeholder="验证码 (控制台/mail.log)" style="display:none"/>
+      <button class="xhs-btn w-full" id="btn-verify" style="display:none">激活账号</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div id="app" style="display:none">
+  <header class="bg-white border-b">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="font-bold text-lg">📖 <span class="xhs-text">小红书</span> 文案生成器</div>
+      <div class="flex gap-2 items-center text-sm">
+        <span id="who" class="text-gray-500"></span>
+        <a href="/settings" class="tab-btn">⚙️ 设置</a>
+        <a href="/admin" id="adminLink" class="tab-btn" style="display:none">🛡️ 管理</a>
+        <button class="tab-btn" id="btn-logout">退出</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- LEFT: INPUT + EDITOR -->
+    <section class="space-y-4">
+      <div class="card">
+        <h2 class="font-bold mb-3">1. 输入主题 或 上传材料</h2>
+        <textarea id="topic" rows="3" placeholder="例：成都锦江区按摩店探店、上班族肩颈放松 tips..."></textarea>
+        <div class="flex items-center gap-2 mt-3">
+          <label class="tab-btn cursor-pointer">
+            📎 上传文件
+            <input id="file" type="file" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" style="display:none"/>
+          </label>
+          <span id="fileName" class="text-xs text-gray-500"></span>
+          <button class="xhs-btn ml-auto" id="btn-gen-text">✨ 生成文案</button>
+        </div>
+        <div id="outputA" class="text-xs text-gray-500 mt-3" style="display:none"></div>
+      </div>
+
+      <div class="card" id="editor" style="display:none">
+        <h2 class="font-bold mb-3">2. 编辑文案</h2>
+        <label class="text-xs text-gray-500">标题</label>
+        <input id="f-title" type="text"/>
+        <div class="flex gap-2 mt-1 mb-3">
+          <button class="tab-btn text-xs" data-copy="title">复制标题</button>
+        </div>
+        <label class="text-xs text-gray-500">正文</label>
+        <textarea id="f-body" rows="8"></textarea>
+        <div class="flex gap-2 mt-1 mb-3">
+          <button class="tab-btn text-xs" data-copy="body">复制正文</button>
+        </div>
+        <label class="text-xs text-gray-500">话题 (逗号分隔)</label>
+        <input id="f-tags" type="text" placeholder="#成都探店,#推拿"/>
+        <div class="flex gap-2 mt-1 mb-3">
+          <button class="tab-btn text-xs" data-copy="tags">复制话题</button>
+          <button class="tab-btn text-xs" data-copy="all">复制全部</button>
+          <button class="xhs-btn text-xs ml-auto" id="btn-save">💾 保存</button>
+        </div>
+      </div>
+
+      <div class="card" id="imgPanel" style="display:none">
+        <h2 class="font-bold mb-3">3. 生成配图</h2>
+        <label class="text-xs text-gray-500">图片 Prompt (可编辑)</label>
+        <textarea id="f-prompt" rows="3"></textarea>
+        <div class="grid grid-cols-3 gap-2 mt-3">
+          <div>
+            <label class="text-xs text-gray-500">尺寸</label>
+            <select id="f-aspect"><option value="3:4">3:4 竖版</option><option value="1:1">1:1 方版</option></select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500">数量</label>
+            <select id="f-count"><option>1</option><option>2</option><option>3</option></select>
+          </div>
+          <div class="flex items-end">
+            <button class="xhs-btn w-full" id="btn-gen-img">🎨 生成图片</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="font-bold mb-3">🗂️ 我的文案</h2>
+        <div id="posts" class="space-y-2"></div>
+      </div>
+    </section>
+
+    <!-- RIGHT: PREVIEW -->
+    <section>
+      <div class="sticky top-4">
+        <h2 class="font-bold mb-3 text-center">📱 小红书预览</h2>
+        <div class="phone">
+          <div class="swipe" id="p-imgs">
+            <img class="phone-img" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800"/>
+          </div>
+          <div class="phone-body">
+            <div class="phone-title" id="p-title">标题会出现在这里</div>
+            <div class="phone-text" id="p-body">正文会出现在这里...</div>
+            <div class="mt-3" id="p-tags"></div>
+          </div>
+        </div>
+        <div class="flex gap-2 mt-3 justify-center">
+          <button class="tab-btn" id="btn-regen-img">🔄 重新生成图片</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>

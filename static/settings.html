@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>API 密钥设置 · 小红书生成器</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<header class="bg-white border-b">
+  <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="/" class="font-bold">← 返回</a>
+    <div class="font-bold">⚙️ API 密钥设置</div>
+    <span></span>
+  </div>
+</header>
+<main class="max-w-3xl mx-auto px-4 py-6 space-y-6">
+  <div class="card">
+    <p class="text-sm text-gray-600">
+      密钥只保存在你本地的 SQLite，加密存储。
+      <span class="xhs-text font-semibold">仅在本页面录入，不会出现在 .env 或代码中。</span>
+    </p>
+  </div>
+
+  <div class="card space-y-3">
+    <div class="flex items-center justify-between">
+      <h2 class="font-bold">📝 文本 LLM</h2>
+      <span id="st-text" class="status-bad">❌ 未设置</span>
+    </div>
+    <label class="text-xs text-gray-500">提供商</label>
+    <select id="text_provider">
+      <option value="openai">OpenAI (gpt-4o-mini)</option>
+      <option value="deepseek">DeepSeek (deepseek-chat)</option>
+      <option value="qwen">通义 Qwen (qwen-plus / qwen-vl)</option>
+    </select>
+    <label class="text-xs text-gray-500">API Key</label>
+    <input id="text_key" type="password" placeholder="sk-... 或 提供商对应 key"/>
+    <div class="text-xs text-gray-500" id="text_masked"></div>
+    <div class="flex gap-2">
+      <button class="xhs-btn" id="save-text">保存</button>
+      <button class="tab-btn" id="test-text">🔌 测试连接</button>
+    </div>
+  </div>
+
+  <div class="card space-y-3">
+    <div class="flex items-center justify-between">
+      <h2 class="font-bold">🎨 图片 LLM</h2>
+      <span id="st-img" class="status-bad">❌ 未设置</span>
+    </div>
+    <label class="text-xs text-gray-500">提供商</label>
+    <select id="image_provider">
+      <option value="dalle">OpenAI DALL·E 3</option>
+      <option value="stability">Stability AI (Stable Image Core)</option>
+      <option value="wanxiang">通义万相 (Wanx)</option>
+    </select>
+    <label class="text-xs text-gray-500">API Key</label>
+    <input id="image_key" type="password" placeholder="sk-... 或 提供商对应 key"/>
+    <div class="text-xs text-gray-500" id="image_masked"></div>
+    <div class="flex gap-2">
+      <button class="xhs-btn" id="save-image">保存</button>
+      <button class="tab-btn" id="test-image">🔌 测试连接</button>
+    </div>
+  </div>
+
+  <div class="card text-xs text-gray-500">
+    提示：管理员可以在 <a href="/admin" class="xhs-text">/admin</a> 设置系统备用 key，作为未填 key 用户的兴退。
+  </div>
+</main>
+<script src="/app.js"></script>
+<script>if(window.initSettings)initSettings();</script>
+</body>
+</html>

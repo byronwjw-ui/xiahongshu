@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>管理后台 · 小红书生成器</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="/style.css"/>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<header class="bg-white border-b">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="/" class="font-bold">← 返回</a>
+    <div class="font-bold">🛡️ 管理后台</div>
+    <a href="/settings" class="tab-btn">⚙️ 我的设置</a>
+  </div>
+</header>
+<main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
+  <div class="card">
+    <h2 class="font-bold mb-3">🔑 系统备用 API 密钥</h2>
+    <p class="text-xs text-gray-500 mb-3">当用户未填写自己的 key 时，将使用这里的备用。</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="space-y-2">
+        <label class="text-xs text-gray-500">文本 Provider</label>
+        <select id="sys_text_provider">
+          <option value="openai">OpenAI</option>
+          <option value="deepseek">DeepSeek</option>
+          <option value="qwen">Qwen</option>
+        </select>
+        <input id="sys_text_key" type="password" placeholder="文本 key"/>
+        <div class="text-xs text-gray-500" id="sys_text_masked"></div>
+      </div>
+      <div class="space-y-2">
+        <label class="text-xs text-gray-500">图片 Provider</label>
+        <select id="sys_image_provider">
+          <option value="dalle">DALL·E 3</option>
+          <option value="stability">Stability AI</option>
+          <option value="wanxiang">通义万相</option>
+        </select>
+        <input id="sys_image_key" type="password" placeholder="图片 key"/>
+        <div class="text-xs text-gray-500" id="sys_image_masked"></div>
+      </div>
+    </div>
+    <div class="mt-3"><button class="xhs-btn" id="save-sys">保存系统密钥</button></div>
+  </div>
+
+  <div class="card">
+    <h2 class="font-bold mb-3">👥 用户列表</h2>
+    <div id="users-list" class="text-sm"></div>
+  </div>
+
+  <div class="card">
+    <h2 class="font-bold mb-3">📝 所有文案</h2>
+    <div id="posts-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+  </div>
+</main>
+<script src="/app.js"></script>
+<script>if(window.initAdmin)initAdmin();</script>
+</body>
+</html>
